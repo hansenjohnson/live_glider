@@ -2,13 +2,13 @@
 title: "Live CTD: DAL556"
 output: html_document
 ---
-
+***
 ```{r setup, include=FALSE}
 # specify default behaviour for code chunks
 knitr::opts_chunk$set(echo = FALSE, warning = F, error = F, message = F, fig.height = 5, fig.width = 7)
 ```
 
-### Summary
+## Summary
 
 Dal556 was deployed in the southern Gulf of St. Lawrence to explore the Orphaline Channel region as a potential habitat of the endangered North Atlantic right whale, as well as other baleen whales. This mission also provides reconnaissance for survey vessels and planes searching for right whales in the region. 
 
@@ -62,8 +62,9 @@ ctd$density = swRho(salinity = ctd$salinity,
                     temperature = ctd$sci_water_temp, 
                     pressure = ctd$sci_water_pressure)
 ```
+***
 
-### Plots
+## Plots
 
 **Plots generated at**: `r Sys.time()`
 
@@ -179,7 +180,8 @@ ggplotly(sal,dynamicTicks = T)
 ggplotly(dens,dynamicTicks = T)
 ```
 
-### Notes
+***
+## Notes
 
 There is rudimentary processing here, which includes conversion from conductivity to salinity, and density calculation (from salinity, raw pressure, and raw temperature data). I have also added some simple quality control that removes spurious temperature and salinity values recorded at the surface. Note that the axes limits (i.e. colour bars) are determined automatically so one should exercise caution if comparing these sections between deployments.
 
