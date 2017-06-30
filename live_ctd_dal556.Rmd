@@ -2,13 +2,13 @@
 title: "Live CTD: DAL556"
 output: html_document
 ---
-
+***
 ```{r setup, include=FALSE}
 # specify default behaviour for code chunks
 knitr::opts_chunk$set(echo = FALSE, warning = F, error = F, message = F, fig.height = 5, fig.width = 7)
 ```
 
-### Summary
+## Summary
 
 Dal556 was deployed in the southern Gulf of St. Lawrence to explore the Orphaline Channel region as a potential habitat of the endangered North Atlantic right whale, as well as other baleen whales. This mission also provides reconnaissance for survey vessels and planes searching for right whales in the region. 
 
@@ -26,14 +26,13 @@ rm(list = ls())
 # load in various required packages and data
 library(data.table, quietly = T, warn.conflicts = F)
 library(ggplot2, quietly = T, warn.conflicts = F)
+# devtools::install_github('hadley/ggplot2')
 library(plotly, quietly = T, warn.conflicts = F)
+# devtools::install_github("ropensci/plotly")
 library(oce, quietly = T, warn.conflicts = F)
 library(ocedata, quietly = T, warn.conflicts = F)
-library(cowplot, quietly = T, warn.conflicts = F)
-library(plyr, quietly = T, warn.conflicts = F)
 library(lubridate, quietly = T, warn.conflicts = F)
 library(marmap, quietly = T)
-library(gridExtra, quietly = T)
 data(coastlineWorldFine)
 load('bathy.rda')
 ```
@@ -63,58 +62,17 @@ ctd$density = swRho(salinity = ctd$salinity,
                     temperature = ctd$sci_water_temp, 
                     pressure = ctd$sci_water_pressure)
 ```
+***
 
-### Plots
+## Plots
 
-Plots generated at: `r Sys.time()`
+**Plots generated at**: `r Sys.time()`
 
-Latest glider timestamp: `r max(ctd$time)`
+**Latest glider timestamp**: `r max(ctd$time)`
 
-Using CTD data from: `r ctd_file`
+**Latest glider position**: `r ctd[nrow(ctd),]$lat`, `r ctd[nrow(ctd),]$lon`
 
-```{r build_plots, echo=FALSE, results = 'hide'}
-##### make pretty plots with ggplot #####
-plot_text = paste0('Plotting all ', nrow(ctd), ' data points...')
-
-# Only plot a subset of data 
-if(nrow(ctd)>10000){
-  norig = nrow(ctd) # original number of points
-  nsub = round(nrow(ctd)/10000,0) # every n number of samples to plot
-  ctd = ctd[seq(1, nrow(ctd), nsub),] # subset to plot every other data point
-
-  plot_text = paste0('Plotting all ', norig, ' points will take too long. Plotting every ', nsub, ' points instead...')
-}
-
-# remove spurious values recorded at the surface
-ctd$salinity[which(ctd$sci_water_pressure < 1 & ctd$salinity < 15)] = NA
-ctd$sci_water_temp[which(ctd$sci_water_pressure < 1 & ctd$sci_water_temp <= 0)] = NA
-
-temp = ggplot()+
-  geom_line(data = ctd, aes(x = time, y = sci_water_pressure), colour = 'grey', na.rm = TRUE)+
-  geom_point(data = ctd, aes(x = time, y = sci_water_pressure, colour = sci_water_temp), na.rm = TRUE)+
-  scale_colour_gradientn(colours = oce.colorsTemperature(200)) +
-  scale_y_reverse() +
-  labs(x = '', y = 'Pressure [dbar]', title = 'Temperature [deg C]', colour = '_______')+
-  theme_bw()
-
-sal = ggplot()+
-  geom_line(data = ctd, aes(x = time, y = sci_water_pressure), colour = 'grey', na.rm = TRUE)+
-  geom_point(data = ctd, aes(x = time, y = sci_water_pressure, colour = salinity), na.rm = TRUE)+
-  scale_colour_gradientn(colours = oce.colorsSalinity(200)) +
-  labs(x = '', y = 'Pressure [dbar]', title = 'Salinity', colour = '_______')+
-  scale_y_reverse() +
-  theme_bw()
-
-dens = ggplot()+
-  geom_line(data = ctd, aes(x = time, y = sci_water_pressure), colour = 'grey', na.rm = TRUE)+
-  geom_point(data = ctd, aes(x = time, y = sci_water_pressure, colour = density), na.rm = TRUE)+
-  scale_colour_gradientn(colours = oce.colorsDensity(200)) +
-  labs(x = '', y = 'Pressure [dbar]', title = 'Density [kg/m3]', colour = '_______')+
-  scale_y_reverse() +
-  theme_bw()
-```
-
-`r plot_text`
+**Using CTD data from**: `r ctd_file`
 
 ### Map
 
@@ -168,19 +126,62 @@ points(latest$lon, latest$lat, pch = 20, col = 'red')
 legend("bottomleft", lty=c(1,NA,NA), pch = c(NA, 17, 20), col = c('blue', 'black', 'red'), c('Track', paste0('Start: ', begin$time), paste0('Latest: ', latest$time)), cex = 0.7, title = 'Glider:')
 ```
 
+```{r build_plots, echo=FALSE, results = 'hide'}
+##### make pretty plots with ggplot #####
+plot_text = paste0('Plotting all ', nrow(ctd), ' data points...')
+
+# Only plot a subset of data 
+if(nrow(ctd)>10000){
+  norig = nrow(ctd) # original number of points
+  nsub = round(nrow(ctd)/10000,0) # every n number of samples to plot
+  ctd = ctd[seq(1, nrow(ctd), nsub),] # subset to plot every other data point
+
+  plot_text = paste0('Plotting all ', norig, ' points will take too long. Plotting every ', nsub, ' points instead...')
+}
+
+# remove spurious values recorded at the surface
+ctd$salinity[which(ctd$sci_water_pressure < 1 & ctd$salinity < 15)] = NA
+ctd$sci_water_temp[which(ctd$sci_water_pressure < 1 & ctd$sci_water_temp <= 0)] = NA
+
+temp = ggplot()+
+  geom_line(data = ctd, aes(x = time, y = sci_water_pressure), colour = 'grey', na.rm = TRUE)+
+  geom_point(data = ctd, aes(x = time, y = sci_water_pressure, colour = sci_water_temp), na.rm = TRUE)+
+  scale_colour_gradientn(colours = oce.colorsTemperature(200)) +
+  scale_y_reverse() +
+  labs(x = '', y = 'Pressure [dbar]', title = 'Temperature [deg C]', colour = '_______')+
+  theme_bw()
+
+sal = ggplot()+
+  geom_line(data = ctd, aes(x = time, y = sci_water_pressure), colour = 'grey', na.rm = TRUE)+
+  geom_point(data = ctd, aes(x = time, y = sci_water_pressure, colour = salinity), na.rm = TRUE)+
+  scale_colour_gradientn(colours = oce.colorsSalinity(200)) +
+  labs(x = '', y = 'Pressure [dbar]', title = 'Salinity', colour = '_______')+
+  scale_y_reverse() +
+  theme_bw()
+
+dens = ggplot()+
+  geom_line(data = ctd, aes(x = time, y = sci_water_pressure), colour = 'grey', na.rm = TRUE)+
+  geom_point(data = ctd, aes(x = time, y = sci_water_pressure, colour = density), na.rm = TRUE)+
+  scale_colour_gradientn(colours = oce.colorsDensity(200)) +
+  labs(x = '', y = 'Pressure [dbar]', title = 'Density [kg/m3]', colour = '_______')+
+  scale_y_reverse() +
+  theme_bw()
+```
+
+
+
 ### Sections
+`r plot_text`
 
-``` {r sections}
-# # stack static ggplots
-# grid.arrange(temp, sal, dens, ncol = 1)
-
+``` {r dynamic_sections}
 # interactive sections
 ggplotly(temp, dynamicTicks = T)
 ggplotly(sal,dynamicTicks = T)
 ggplotly(dens,dynamicTicks = T)
 ```
 
-### Notes
+***
+## Notes
 
 There is rudimentary processing here, which includes conversion from conductivity to salinity, and density calculation (from salinity, raw pressure, and raw temperature data). I have also added some simple quality control that removes spurious temperature and salinity values recorded at the surface. Note that the axes limits (i.e. colour bars) are determined automatically so one should exercise caution if comparing these sections between deployments.
 
