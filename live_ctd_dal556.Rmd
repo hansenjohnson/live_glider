@@ -131,9 +131,9 @@ legend("bottomleft", lty=c(1,NA,NA), pch = c(NA, 17, 20), col = c('blue', 'black
 plot_text = paste0('Plotting all ', nrow(ctd), ' data points...')
 
 # Only plot a subset of data 
-if(nrow(ctd)>10000){
+if(nrow(ctd)>20000){
   norig = nrow(ctd) # original number of points
-  nsub = round(nrow(ctd)/10000,0) # every n number of samples to plot
+  nsub = round(nrow(ctd)/20000,0) # every n number of samples to plot
   ctd = ctd[seq(1, nrow(ctd), nsub),] # subset to plot every other data point
 
   plot_text = paste0('Plotting all ', norig, ' points will take too long. Plotting every ', nsub, ' points instead...')
