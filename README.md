@@ -24,4 +24,6 @@ Currently live (but still in testing) [here](http://leviathan.ocean.dal.ca/live_
 * Add some ability to select point on map and see exact point on section. My first thought here is to add a slider bar to pick a time which moves 1) a marker on the map (e.g. glider) and 2) a vertical line on the section. To do this I suspect I will need to re-arrange the code to create a reactive CTD product before mapping. I think it's possible to do this because the CTD data also have lat/lon position. Doing it this way allows the section and map 'locator' to share the same timesteps.
 * Adjust playback speed for the date slider animation (it's currently set at 1 day, and very slow)  
 * Add option for interactive plotting of the CTD section (i.e. plotly). I'm curious to see how slow this will be compared to base graphics...  
-
+* Add links to the deployment page on Mark's website and OTN  
+* Look into adding links to specific pitch track records for each detection  
+* Add some diagnostics (i.e. latest ctd data, latest kml data, latest detections, ...)  
