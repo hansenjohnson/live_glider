@@ -1,4 +1,4 @@
-plot_section = function(ctd,var,zlim,cex.all=1.5){
+plot_section = function(ctd,var,zlim,cex.all=2){
   
   # switch for variable
   if(var == 'temperature'){
