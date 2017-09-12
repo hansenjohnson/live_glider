@@ -13,11 +13,14 @@ glider_list = dir(path = './', pattern = 'data-')
 # isolate glider name
 glider_list = gsub(glider_list, pattern = 'data-', replacement = '')
 
-# choices
-# spp_choices = c('present', 'maybe')
+# species choices
 spp_choices = c('right', 'fin', 'sei', 'humpback')
 
+# color choices
 col_choices = c('red', 'lightgrey', 'darkgrey', 'tan', 'white', 'brown', 'yellow', 'lightblue', 'cyan', 'lightgreen', 'darkred', 'purple','green', 'black')
+
+# glider icon
+gliderIcon = makeIcon("icons/slocum.png", iconWidth = 50, iconHeight = 50)
 
 # ui ----------------------------------------------------------------------
 
@@ -160,6 +163,11 @@ server <- function(input, output) {
     subset(Surf(), Surf()$date >= input$range[1] & Surf()$date <= input$range[2])
   })
   
+  # latest surfacing
+  NOW <- reactive({
+    SURF()[nrow(SURF()),]
+  })
+  
   # detections
   DET <- reactive({
     Det()[Det()$date >= input$range[1] & Det()$date <= input$range[2],]
@@ -211,7 +219,10 @@ server <- function(input, output) {
   track_grp = 'Glider track'
   
   # glider surfacings
-  surf_grp = 'Glider surfacings'
+  now_grp = 'Latest surfacing'
+  
+  # glider surfacings
+  surf_grp = 'All surfacings'
   
   # glider wpts
   wpt_grp = "Glider waypoints"
@@ -237,7 +248,8 @@ server <- function(input, output) {
       
     # add layer control panel
     addLayersControl(
-      overlayGroups = c(track_grp, 
+      overlayGroups = c(track_grp,
+                        now_grp,
                         surf_grp,
                         wpt_grp),
       options = layersControlOptions(collapsed = FALSE), position = 'bottomright') %>%
@@ -258,7 +270,15 @@ server <- function(input, output) {
       # add glider track
       addPolylines(data = SURF(), ~lon, ~lat, weight = 2, group = track_grp) %>%
       
-      # add glider surfacings
+      # add latest surfacing
+      addMarkers(data = NOW(), ~lon, ~lat, icon = gliderIcon,
+                 popup = ~paste(sep = "<br/>",
+                                paste0('Latest surfacing: ', input$glider),
+                                paste0('Time: ', as.character(time)),
+                                paste0('Position: ', as.character(lat), ', ', as.character(lon))),
+                 label = ~paste0('Latest surfacing: ', as.character(time)), group = now_grp) %>%
+      
+      # add all surfacings
       addCircleMarkers(data = SURF(), ~lon, ~lat, radius = 6, fillOpacity = .2, stroke = F,
                        popup = ~paste(sep = "<br/>",
                                       "Glider surfacing",
@@ -440,7 +460,7 @@ server <- function(input, output) {
     # define slider bar
     sliderInput("section_limits", "Choose colorbar limits:", rng[1], rng[2],
                 value = value, animate = F)
-  })
+  }) # CTD VAR SLIDER
   
   output$ctdPlot = renderPlot({
     
@@ -465,9 +485,9 @@ server <- function(input, output) {
     
     # plot data
     plot_section(CTD(), input$section_var, input$section_limits)
-  })
+  }) # CTD PLOT
   
-}
+} # SERVER
 
 # run app -----------------------------------------------------------
 shinyApp(ui, server)
