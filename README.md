@@ -27,3 +27,4 @@ Currently live (but still in testing) [here](http://leviathan.ocean.dal.ca/live_
 * Add links to the deployment page on Mark's website and OTN  
 * Look into adding links to specific pitch track records for each detection  
 * Add some diagnostics (i.e. latest ctd data, latest kml data, latest detections, ...)  
+* Play around with clustering options for species detections  
