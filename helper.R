@@ -34,7 +34,7 @@ plot_section = function(ctd,var,zlim,cex.all=2){
   plot(ctd$time, ctd$depth, ylim = c(175,0), type = 'l', col = 'grey', 
        ylab = 'Depth [m]', xlab = '', cex.lab = cex.all, cex.axis = cex.all)
   mtext(paste0(lab),side = 3, line = 1,adj = 0)
-  points(ctd$time, ctd$depth, pch = 21, bg = c$zcol, cex = cex.all, col = NULL)
+  points(ctd$time, ctd$depth, pch = 21, bg = c$zcol, cex = cex.all+cex.all*0.2, col = NULL)
   
   # add palette
   drawPalette(c$zlim, col=c$col, breaks=c$breaks, zlab = '', fullpage = T, 
