@@ -13,4 +13,4 @@ The aim of this work is to create a tool to visualize sensor output (ocean hydro
 
 ### Demonstration
 
-Not live yet, coming soon!
+Currently live (but still in testing) [here](http://leviathan.ocean.dal.ca/live_glider/)
