@@ -4,7 +4,7 @@ library(shiny)
 library(htmltools)
 library(htmlwidgets)
 library(oce)
-source('./helper.R')
+source('helper.R')
 
 # setup -------------------------------------------------------------------
 
