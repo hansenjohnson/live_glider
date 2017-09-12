@@ -1,8 +1,5 @@
-README
+live_glider
 ================
-
-## live_glider
-
 ### Overview
 
 The aim of this work is to create a tool to visualize sensor output (ocean hydrography and baleen whale acoustic detections) from Slocum gliders in the field.
