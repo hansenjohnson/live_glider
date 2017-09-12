@@ -264,7 +264,8 @@ server <- function(input, output) {
                        label = ~paste0('Glider surfacing: ', as.character(time)), group = surf_grp) %>%
       
       # add glider waypoints
-      addCircleMarkers(data = Wpts(), ~lon, ~lat, radius = 6, fillOpacity = .2, stroke = F, color = 'orange',
+      addCircleMarkers(data = Wpts(), ~lon, ~lat, radius = 6, stroke = T, weight = 2,
+                       fillOpacity = 0.6, color = 'white', fillColor = 'orange', opacity = 1,
                        popup = ~paste(sep = "<br/>",
                                       paste0("Waypoint: ", as.character(name)),
                                       paste0(as.character(lat), ', ', as.character(lon))),
