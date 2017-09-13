@@ -27,7 +27,7 @@ gliderIcon = makeIcon("icons/slocum.png", iconWidth = 50, iconHeight = 50)
 ui <- fluidPage(
   
   # import styles from index
-  includeCSS("../server_index/css/style.css"),
+  # includeCSS("../server_index/css/style.css"),
 
   titlePanel("Live Glider Data"),
   
