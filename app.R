@@ -27,8 +27,12 @@ gliderIcon = makeIcon("icons/slocum.png", iconWidth = 50, iconHeight = 50)
 ui <- fluidPage(
   titlePanel("Live Glider Data"),
   
+  # sidebar -----------------------------------------------------------------
+  
   sidebarLayout(
     sidebarPanel(
+      
+      # glider -----------------------------------------------------------------
       
       # choose glider
       selectInput("glider", "Choose glider:", choices = glider_list, 
@@ -37,6 +41,8 @@ ui <- fluidPage(
       # choose time (reacts to glider choice)
       uiOutput("sliderDate"),
       
+      # ctd -----------------------------------------------------------------
+      
       # choose plotting variable
       selectInput("section_var", "Choose section to plot:", 
                   choices = c('temperature', 'salinity', 'density'), 
@@ -44,6 +50,8 @@ ui <- fluidPage(
       
       # choose colorbar limits
       uiOutput("sliderVar"),
+      
+      # whale -----------------------------------------------------------------
       
       # right
       tags$h5(strong("Right whales:")),
@@ -95,14 +103,18 @@ ui <- fluidPage(
           checkboxInput("hw_maybe", 'maybe', value = F)),
       div(style="display: inline-block;vertical-align:top; width: 120px;",
           selectInput("hw_maybe_col", NULL, choices = col_choices, 
-                      selected = col_choices[8], multiple = F)),br()
-    ),
+                      selected = col_choices[8], multiple = F)),br(),
+      
+      # set panel width
+      width = 3),
+    
+    # main panel ---------------------------------------------------------------
     
     mainPanel(
       textOutput("glider"),
       leafletOutput("gliderMap", width = "100%", height = 600),
-      plotOutput("ctdPlot")
-    )
+      plotOutput("ctdPlot"),
+      width = 9)
   )
 )
 
