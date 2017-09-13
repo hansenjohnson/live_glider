@@ -100,7 +100,7 @@ ui <- fluidPage(
     
     mainPanel(
       textOutput("glider"),
-      leafletOutput("gliderMap"),
+      leafletOutput("gliderMap", width = "100%", height = 600),
       plotOutput("ctdPlot")
     )
   )
