@@ -116,8 +116,8 @@ ui <- fluidPage(
     
     mainPanel(
       textOutput("glider"),
-      leafletOutput("gliderMap", width = "100%", height = 600),
-      plotOutput("ctdPlot"),
+      leafletOutput("gliderMap", width = "100%", height = 400),
+      plotOutput("ctdPlot", height = 300),
       width = 9)
   )
 )
