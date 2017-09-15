@@ -58,7 +58,7 @@ ui <- fluidPage(
       uiOutput("sliderNpoints"),
       
       # show how many points are plotted
-      helpText(textOutput("npoints_text")),
+      helpText(htmlOutput("npoints_text")),
       
       # choose if plots autoscale or not
       checkboxInput("autoscale", "Autoscale?", value = T),
@@ -491,8 +491,10 @@ server <- function(input, output) {
   
   # ctd points -----------------------------------------------------------
   
-  output$npoints_text = renderText({ 
-    paste0('Plotting every ', round(nrow(CTD())/nrow(CTD_sub()),0), ' point(s) (', nrow(CTD_sub()), ' out of ', nrow(CTD()), ')')
+  output$npoints_text <- renderUI({
+    str1 = paste0('Plotting every ', round(nrow(CTD())/nrow(CTD_sub()),0), ' point(s)')
+    str2 = paste0('(', nrow(CTD_sub()), ' out of ', nrow(CTD()), ')')
+    HTML(paste(str1, str2, sep = '<br/>'))
   })
   
   # ctd limits -----------------------------------------------------------
