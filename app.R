@@ -53,7 +53,7 @@ ui <- fluidPage(
                   selected = 'temperature', multiple = FALSE),
       
       # # choose number of points to plot
-      numericInput("npoints", label = 'Choose subsample to plot:', value = 10000, min = 1, max = 100000000, step = 100),
+      numericInput("npoints", label = 'Choose subsample to plot:', value = 20000, min = 1, max = 100000000, step = 100),
       
       uiOutput("sliderNpoints"),
       
