@@ -52,6 +52,10 @@ ui <- fluidPage(
                   choices = c('temperature', 'salinity', 'density'), 
                   selected = 'temperature', multiple = FALSE),
       
+      selectInput("section_style", "Choose style of section plot:", 
+                  choices = c('base', 'ggplot', 'dynamic'), 
+                  selected = 'base', multiple = FALSE),
+      
       # choose colorbar limits
       uiOutput("sliderVar"),
       
@@ -128,7 +132,7 @@ server <- function(input, output) {
   
   # read help fxns-----------------------------------------------------------
   
-  source('helper.R')
+  source('helper2.R')
   
   # choose glider -----------------------------------------------------------
   
@@ -456,7 +460,7 @@ server <- function(input, output) {
     ifelse(input$rw_maybe, showGroup(proxy, 'rw_maybe'),hideGroup(proxy, 'rw_maybe'))
   })
   
-  # CTD data -----------------------------------------------------------
+  # CTD -----------------------------------------------------------
   
   # build variable slider
   output$sliderVar <- renderUI({
@@ -478,31 +482,30 @@ server <- function(input, output) {
                 value = value, animate = F)
   }) # CTD VAR SLIDER
   
-  output$ctdPlot = renderPlot({
-    
-    CTD <- reactive({
-      
-      # subset of CTD data by date
-      ctd = subset(Ctd(), Ctd()$date >= input$range[1] & Ctd()$date <= input$range[2])
-      
-      # threshold number of points to being subsetting
-      npoints = 10000
-      
-      # plot a subset of data if there are too many points 
-      if(nrow(ctd)>npoints){
-        norig = nrow(ctd) # original number of points
-        nsub = round(nrow(ctd)/npoints,0) # every n number of samples to plot
-        ctd[seq(1, nrow(ctd), nsub),] # subset to plot every other data point
-      } else {
-        ctd
-      }
-
-    })  
-    
-    # plot data
-    plot_section(CTD(), input$section_var, input$section_limits[1], input$section_limits[2])
-  }) # CTD PLOT
+  # plot ctd ----------------------------------------------------------------
   
+  # ctd data
+  CTD <- reactive({
+    # subset of CTD data by date
+    ctd = subset(Ctd(), Ctd()$date >= input$range[1] & Ctd()$date <= input$range[2])
+    # number of points to subset
+    npoints = 10000
+    
+    # plot a subset of data if there are too many points 
+    if(nrow(ctd)>npoints){
+      norig = nrow(ctd) # original number of points
+      nsub = round(nrow(ctd)/npoints,0) # every n number of samples to plot
+      ctd[seq(1, nrow(ctd), nsub),] # subset to plot every other data point
+    } else {
+      ctd
+    }
+  })
+  
+  # plot
+  output$ctdPlot = renderPlot({
+    plot_section(ctd = CTD(), var = input$section_var, zlim1 = input$section_limits[1], zlim2 = input$section_limits[2], plot_type = input$section_style)
+  })
+
 } # SERVER
 
 # run app -----------------------------------------------------------
