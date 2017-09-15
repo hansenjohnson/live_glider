@@ -20,6 +20,11 @@ proc_glider_ctd = function(glider_dir){
   # make date timestamp
   ctd$date = as.Date(ctd$time)
   
+  # quality control (remove zeros at the surface)
+  ctd$sci_water_pressure[which(ctd$sci_water_pressure == 0)] = NA
+  ctd$sci_water_temp[which(ctd$sci_water_temp == 0 & ctd$sci_water_pressure == 0)] = NA
+  ctd$sci_water_cond[which(ctd$sci_water_cond == 0 & ctd$sci_water_pressure == 0)] = NA
+  
   # convert pressure from dbar to bar
   ctd$pressure = ctd$sci_water_pressure*10
   
@@ -35,11 +40,21 @@ proc_glider_ctd = function(glider_dir){
                         pressure = ctd$sci_water_pressure,
                         conductivityUnit = "S/m")
   
+  
+  
   # calculate density
   ctd$density = swRho(salinity = ctd$salinity, 
                       temperature = ctd$sci_water_temp, 
                       pressure = ctd$sci_water_pressure)
   
+  # remove extra columns
+  ctd$sci_water_cond = NULL
+  ctd$sci_water_pressure = NULL
+  ctd$sci_water_temp = NULL
+  ctd$sci_m_present_time = NULL
+  ctd$unixtime = NULL
+  
+  # save
   saveRDS(ctd, file = paste0(glider_dir,'/ctd.rds'))
 }
 
