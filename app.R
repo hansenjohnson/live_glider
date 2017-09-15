@@ -52,11 +52,18 @@ ui <- fluidPage(
                   choices = c('temperature', 'salinity', 'density'), 
                   selected = 'temperature', multiple = FALSE),
       
-      selectInput("section_style", "Choose style of section plot:", 
-                  choices = c('base', 'ggplot', 'dynamic'), 
-                  selected = 'base', multiple = FALSE),
+      # # choose number of points to plot
+      numericInput("npoints", label = 'Choose subsample to plot:', value = 10000, min = 1, max = 100000000, step = 100),
       
-      # choose colorbar limits
+      uiOutput("sliderNpoints"),
+      
+      # show how many points are plotted
+      helpText(textOutput("npoints_text")),
+      
+      # choose if plots autoscale or not
+      checkboxInput("autoscale", "Autoscale?", value = T),
+      
+      # choose limits
       uiOutput("sliderVar"),
       
       # whale -----------------------------------------------------------------
@@ -121,8 +128,8 @@ ui <- fluidPage(
     mainPanel(
       textOutput("glider"),
       leafletOutput("gliderMap", width = "100%", height = 400),
-      plotOutput("ctdPlot", height = 300),
-      width = 9)
+      plotOutput("ctdPlot", height = 300)
+      )
   )
 )
 
@@ -132,7 +139,7 @@ server <- function(input, output) {
   
   # read help fxns-----------------------------------------------------------
   
-  source('helper2.R')
+  source('helper.R')
   
   # choose glider -----------------------------------------------------------
   
@@ -460,7 +467,35 @@ server <- function(input, output) {
     ifelse(input$rw_maybe, showGroup(proxy, 'rw_maybe'),hideGroup(proxy, 'rw_maybe'))
   })
   
-  # CTD -----------------------------------------------------------
+  # ctd date ----------------------------------------------------------------
+  
+  CTD <- reactive({
+    # subset of CTD data by date
+    ctd = subset(Ctd(), Ctd()$date >= input$range[1] & Ctd()$date <= input$range[2])
+  })
+  
+  # ctd subsample ----------------------------------------------------------
+  
+  CTD_sub <- reactive({
+    # number of points to subset
+    npoints = input$npoints
+    # plot a subset of data if there are too many points 
+    if(nrow(CTD())>npoints){
+      norig = nrow(CTD())
+      nsub = round(norig/npoints,0)
+      CTD()[seq(1, nrow(CTD()), nsub),] # subset to plot every other data point
+    } else {
+      CTD()
+    }
+  })
+  
+  # ctd points -----------------------------------------------------------
+  
+  output$npoints_text = renderText({ 
+    paste0('Plotting every ', round(nrow(CTD())/nrow(CTD_sub()),0), ' point(s) (', nrow(CTD_sub()), ' out of ', nrow(CTD()), ')')
+  })
+  
+  # ctd limits -----------------------------------------------------------
   
   # build variable slider
   output$sliderVar <- renderUI({
@@ -468,42 +503,39 @@ server <- function(input, output) {
     # switch for variable
     if(input$section_var == 'temperature'){
       rng = c(-5,30)
-      value = c(-1,25)
+      if(input$autoscale){
+        value = c(floor(min(CTD_sub()$temperature, na.rm = T)),
+                  ceiling(max(CTD_sub()$temperature, na.rm = T)))
+      } else {
+        value = c(-1, 20)
+      }
     } else if(input$section_var == 'salinity'){
       rng = c(15,45)
-      value = c(22,35)
+      if(input$autoscale){
+        value = c(floor(min(CTD_sub()$salinity, na.rm = T)),
+                  ceiling(max(CTD_sub()$salinity, na.rm = T)))
+      } else {
+        value = c(22, 35)
+      }
     } else if(input$section_var == 'density'){
       rng = c(1010,1035)
-      value = c(1017,1028)
+      if(input$autoscale){
+        value = c(floor(min(CTD_sub()$density, na.rm = T)),
+                  ceiling(max(CTD_sub()$density, na.rm = T)))
+      } else {
+        value = c(1017, 1028)
+      }
     }
     
     # define slider bar
-    sliderInput("section_limits", "Choose colorbar limits:", rng[1], rng[2],
-                value = value, animate = F)
+    sliderInput("section_limits", "Choose colorbar limits:", min = rng[1], max = rng[2], value = value, animate = F)
   }) # CTD VAR SLIDER
   
-  # plot ctd ----------------------------------------------------------------
-  
-  # ctd data
-  CTD <- reactive({
-    # subset of CTD data by date
-    ctd = subset(Ctd(), Ctd()$date >= input$range[1] & Ctd()$date <= input$range[2])
-    # number of points to subset
-    npoints = 10000
-    
-    # plot a subset of data if there are too many points 
-    if(nrow(ctd)>npoints){
-      norig = nrow(ctd) # original number of points
-      nsub = round(nrow(ctd)/npoints,0) # every n number of samples to plot
-      ctd[seq(1, nrow(ctd), nsub),] # subset to plot every other data point
-    } else {
-      ctd
-    }
-  })
+  # ctd section -----------------------------------------------------------
   
   # plot
   output$ctdPlot = renderPlot({
-    plot_section(ctd = CTD(), var = input$section_var, zlim1 = input$section_limits[1], zlim2 = input$section_limits[2], plot_type = input$section_style)
+    plot_section(ctd = CTD_sub(), var = input$section_var, zlim = input$section_limits)
   })
 
 } # SERVER

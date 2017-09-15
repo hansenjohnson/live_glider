@@ -1,26 +1,27 @@
-plot_section = function(ctd,var,zlim1,zlim2,cex.all=1.5){
+plot_section = function(ctd,var,zlim,cex.all=1.5){
   
   # switch for variable
   if(var == 'temperature'){
     pal = oce.colorsTemperature()
     lab = 'Temperature [deg C]'
-    # zlim = c(-1,25)
+    c = colormap(ctd$temperature, breaks=100, zclip = T, col = pal, zlim = zlim)
   } else if(var == 'salinity'){
     pal = oce.colorsSalinity()
     lab = 'Salinity'
-    # zlim = c(22,35)
+    c = colormap(ctd$salinity, breaks=100, zclip = T, col = pal, zlim = zlim)
   } else if(var == 'density'){
     pal = oce.colorsDensity()
     lab = 'Density [kg/m3]'
-    # zlim = c(1017,1028)
+    c = colormap(ctd$density, breaks=100, zclip = T, col = pal, zlim = zlim)
   } else {
     stop('Unknown variable! Please choose from: temperature, salinity, or density')
   }
   
-  # define colormap
-  c = colormap(unlist(ctd[which(colnames(ctd) == var)]), breaks=100, zclip = T, col = pal, zlim = c(zlim1,zlim2)) # map values to colors
+  # # colormap
+  # c = colormap(unlist(ctd[which(colnames(ctd) == var)]), breaks=100, zclip = T, col = pal, zlim = zlim)
   
-  # setup for plotting
+  
+  # setup layout for plotting
   m = rbind(c(1,1,1,1,1,1,1,1,1,1,1,2),
             c(1,1,1,1,1,1,1,1,1,1,1,2),
             c(1,1,1,1,1,1,1,1,1,1,1,2),
