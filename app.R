@@ -500,7 +500,7 @@ server <- function(input, output) {
     })  
     
     # plot data
-    plot_section(CTD(), input$section_var, input$section_limits)
+    plot_section(CTD(), input$section_var, input$section_limits[1], input$section_limits[2])
   }) # CTD PLOT
   
 } # SERVER

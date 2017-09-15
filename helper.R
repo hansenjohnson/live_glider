@@ -1,4 +1,4 @@
-plot_section = function(ctd,var,zlim,cex.all=1.5){
+plot_section = function(ctd,var,zlim1,zlim2,cex.all=1.5){
   
   # switch for variable
   if(var == 'temperature'){
@@ -18,7 +18,7 @@ plot_section = function(ctd,var,zlim,cex.all=1.5){
   }
   
   # define colormap
-  c = colormap(unlist(ctd[which(colnames(ctd) == var)]), breaks=100, zlim = zlim, zclip = T, col = pal) # map values to colors
+  c = colormap(unlist(ctd[which(colnames(ctd) == var)]), breaks=100, zclip = T, col = pal, zlim = c(zlim1,zlim2)) # map values to colors
   
   # setup for plotting
   m = rbind(c(1,1,1,1,1,1,1,1,1,1,1,2),
