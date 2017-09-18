@@ -40,7 +40,7 @@ ui <- fluidPage(
       
       # choose glider
       selectInput("glider", "Choose glider:", choices = glider_list, 
-                  selected = glider_list[2], multiple = FALSE),
+                  selected = glider_list[1], multiple = FALSE),
       
       # choose time (reacts to glider choice)
       uiOutput("sliderDate"),
