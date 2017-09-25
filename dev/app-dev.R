@@ -4,6 +4,7 @@ library(shiny)
 library(htmltools)
 library(htmlwidgets)
 library(oce)
+# library(shinyjqui)
 
 # setup -------------------------------------------------------------------
 
@@ -125,11 +126,20 @@ ui <- fluidPage(
     
     # main panel ---------------------------------------------------------------
     
+    # sortable
+    # mainPanel(
+    #   jqui_sortabled(div(id='plots',
+    #   textOutput("glider"),
+    #   leafletOutput("gliderMap", width = "100%", height = 400),
+    #   plotOutput("ctdPlot", height = 300)))
+    #   )
+    
+    # not sortable
     mainPanel(
       textOutput("glider"),
       leafletOutput("gliderMap", width = "100%", height = 400),
       plotOutput("ctdPlot", height = 300)
-      )
+    )
   )
 )
 

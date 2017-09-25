@@ -3,10 +3,11 @@
 # prep data ---------------------------------------------------------------
 
 # read in data
-D = readRDS('data-dal556/detections.rds')
+D = readRDS('data-bond/detections.rds')
+ctd = readRDS('data-bond/ctd.rds')
 
 # date range
-rng = c(as.Date('2017-06-05'), as.Date('2017-08-02'))
+rng = range(ctd$date)
 
 # date subset
 DET = D[D$date >= rng[1] & D$date <= rng[2],]
@@ -30,8 +31,8 @@ hw_m = DET[DET$humpback == 'maybe',]
 # point plot --------------------------------------------------------------
 
 # layout
-m = rbind(c(2,1,1,1,1,1,1,1,1,1),
-          c(2,1,1,1,1,1,1,1,1,1))
+m = rbind(c(3,1,1,1,1,1,1,1,1,1,1,1,2),
+          c(3,1,1,1,1,1,1,1,1,1,1,1,2))
 
 layout(m)
 
