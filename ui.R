@@ -27,9 +27,8 @@ col_choices = c('red', 'lightgrey', 'darkgrey', 'tan', 'white', 'brown', 'yellow
 gliderIcon = makeIcon("icons/slocum.png", iconWidth = 50, iconHeight = 50)
 # ui ----------------------------------------------------------------------
 
-header <- dashboardHeader(
-  title = "Live Glider"
-)
+header <-  dashboardHeader(title = list(tags$a(href='https://leviathan.ocean.dal.ca',
+                                              icon("home")), 'Live Glider'))
 
 # body --------------------------------------------------------------------
 
