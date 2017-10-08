@@ -27,8 +27,26 @@ col_choices = c('red', 'lightgrey', 'darkgrey', 'tan', 'white', 'brown', 'yellow
 gliderIcon = makeIcon("icons/slocum.png", iconWidth = 50, iconHeight = 50)
 # ui ----------------------------------------------------------------------
 
-header <-  dashboardHeader(title = list(tags$a(href='https://leviathan.ocean.dal.ca',
-                                              icon("home")), 'Live Glider'))
+# header <-  dashboardHeader(title = list(tags$a(href='https://leviathan.ocean.dal.ca',
+#                                               icon("home")), 'Live Glider'))
+
+header <-  dashboardHeader(title = 'Live Glider',
+                           dropdownMenu(
+                             type = "notifications",
+                             icon = 'leviathan.ocean.dal.ca',
+                             badgeStatus = NULL,
+                             headerText = "",
+                             notificationItem("Home",
+                                              icon = icon("home"),
+                                              href = "http://leviathan.ocean.dal.ca"),
+                             notificationItem("2017 right whale map",
+                                              icon = icon("map"),
+                                              href = "http://leviathan.ocean.dal.ca/right_whale_map/"),
+                             notificationItem("WhaleMap",
+                                              icon = icon("globe"),
+                                              href = "http://leviathan.ocean.dal.ca/WhaleMap/")
+                           )
+)
 
 # body --------------------------------------------------------------------
 
