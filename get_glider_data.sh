@@ -15,11 +15,8 @@ KML=http://gliders.oceantrack.org/ge
 declare -A URL
 
 # assign paths to detection data for each glider
-URL=(
-	[dal556]=http://dcs.whoi.edu/dal1017/dal1017_dal556_html/ptracks/manual_analysis.csv
-	#[dal556]=http://dcs.whoi.edu/dal0617_dal556/dal556_html/ptracks/manual_analysis.csv
-	[otn200]=http://dcs.whoi.edu/dal0817/dal0817_otn200_html/ptracks/manual_analysis.csv
-	#[bond]=http://dcs.whoi.edu/dal0617_bond/bond_html/ptracks/manual_analysis.csv
+URL=(		
+	[otn200]=http://dcs.whoi.edu/dal1217/dal0817_otn200_html/ptracks/manual_analysis.csv	
 )
 
 # download data
