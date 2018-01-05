@@ -81,8 +81,19 @@ proc_glider_kml = function(glider_dir){
   # convert timestamp of latest surfacing
   surf$time[nrow(surf)] = strsplit(x = as.character(surf$time[nrow(surf)]), split = '[()]')[[1]][2]
   
-  # fix date
-  surf$time = as.POSIXct(surf$time, format = '%m-%d %H:%M')
+  # convert timestamps
+  t = as.POSIXlt(surf$time, format = '%m-%d %H:%M', tz = 'America/Halifax')
+  
+  # fix year in timestamp (for multi-year deployments)
+  if(11 %in% t$mo & 0 %in% t$mo){
+    yind = which(t$mo>6)
+    t$year[yind] = t$year[yind]-1
+  }
+  
+  # add to data frame
+  surf$time = t
+  
+  # add date
   surf$date = as.Date(surf$time)
   
   # save
