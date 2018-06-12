@@ -11,10 +11,10 @@ library(shinydashboard)
 # setup -------------------------------------------------------------------
 
 # make list of glider deployments
-glider_list = dir(path = './', pattern = 'data-')
+glider_list = list.dirs(path = 'data', full.names = T, recursive = F)
 
 # isolate glider name
-glider_list = gsub(glider_list, pattern = 'data-', replacement = '')
+glider_list = basename(glider_list)
 
 # species choices
 spp_choices = c('right', 'fin', 'sei', 'humpback')
@@ -24,7 +24,6 @@ col_choices = c('red', 'lightgrey', 'darkgrey', 'tan', 'white', 'brown', 'yellow
 
 # glider icon
 gliderIcon = makeIcon("icons/slocum.png", iconWidth = 50, iconHeight = 50)
-
 
 # section setup -----------------------------------------------------------
 
@@ -72,22 +71,22 @@ function(input, output, session) {
   
   # surfacings
   Surf = reactive({
-    readRDS(paste0('data-', input$glider,'/surfacings.rds'))
+    readRDS(paste0('data/', input$glider,'/surfacings.rds'))
   })
   
-  # waypoints
-  Wpts = reactive({
-    readRDS(paste0('data-', input$glider,'/waypoints.rds'))
-  })
+  # # waypoints
+  # Wpts = reactive({
+  #   readRDS(paste0('data/', input$glider,'/waypoints.rds'))
+  # })
   
   # detections
   Det = reactive({
-    readRDS(paste0('data-', input$glider,'/detections.rds'))
+    readRDS(paste0('data/', input$glider,'/detections.rds'))
   })
   
   # ctd
   Ctd = reactive({
-    readRDS(paste0('data-', input$glider,'/ctd.rds'))
+    readRDS(paste0('data/', input$glider,'/ctd.rds'))
   })
   
   # date slider -----------------------------------------------------------
@@ -185,7 +184,7 @@ function(input, output, session) {
   surf_grp = 'All surfacings'
   
   # glider wpts
-  wpt_grp = "Glider waypoints"
+  # wpt_grp = "Glider waypoints"
   
   # basemap -----------------------------------------------------------
   
@@ -210,12 +209,11 @@ function(input, output, session) {
       addLayersControl(
         overlayGroups = c(track_grp,
                           now_grp,
-                          surf_grp,
-                          wpt_grp),
+                          surf_grp),
         options = layersControlOptions(collapsed = FALSE), position = 'bottomright') %>%
       
       # hide some groups by default
-      hideGroup(c(surf_grp, wpt_grp))
+      hideGroup(c(surf_grp))
     
   })
   
@@ -244,15 +242,15 @@ function(input, output, session) {
                                       "Glider surfacing",
                                       as.character(time),
                                       paste0(as.character(lat), ', ', as.character(lon))),
-                       label = ~paste0('Glider surfacing: ', as.character(time)), group = surf_grp) %>%
+                       label = ~paste0('Glider surfacing: ', as.character(time)), group = surf_grp)
       
-      # add glider waypoints
-      addCircleMarkers(data = Wpts(), ~lon, ~lat, radius = 6, stroke = T, weight = 2,
-                       fillOpacity = 0.6, color = 'white', fillColor = 'orange', opacity = 1,
-                       popup = ~paste(sep = "<br/>",
-                                      paste0("Waypoint: ", as.character(name)),
-                                      paste0(as.character(lat), ', ', as.character(lon))),
-                       label = ~paste0('Waypoint: ', as.character(name)), group = wpt_grp)
+      # # add glider waypoints
+      # addCircleMarkers(data = Wpts(), ~lon, ~lat, radius = 6, stroke = T, weight = 2,
+      #                  fillOpacity = 0.6, color = 'white', fillColor = 'orange', opacity = 1,
+      #                  popup = ~paste(sep = "<br/>",
+      #                                 paste0("Waypoint: ", as.character(name)),
+      #                                 paste0(as.character(lat), ', ', as.character(lon))),
+      #                  label = ~paste0('Waypoint: ', as.character(name)), group = wpt_grp)
     
   })
   

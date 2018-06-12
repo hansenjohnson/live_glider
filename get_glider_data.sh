@@ -2,8 +2,8 @@
 # download glider data (detections and tracklines), then process using R script
 
 # Select app directory
-DESTDIR=/srv/shiny-server/live_glider # server
-#DESTDIR=/Users/hansenjohnson/Projects/live_glider # local
+# DESTDIR=/srv/shiny-server/live_glider # server
+DESTDIR=/Users/hansenjohnson/Projects/live_glider # local
 
 # Glider data URL (do not change)
 OTN=http://gliders.oceantrack.org/data/live/
@@ -15,15 +15,17 @@ KML=http://gliders.oceantrack.org/ge
 declare -A URL
 
 # assign paths to detection data for each glider
-URL=(		
-	[otn200]=http://dcs.whoi.edu/dal1217/dal1217_otn200_html/ptracks/manual_analysis.csv
+URL=(
+	# [otn200]=http://dcs.whoi.edu/dal1217/dal1217_otn200_html/ptracks/manual_analysis.csv
+	[fundy]=http://dcs.whoi.edu/dal0618/dal0618_fundy_html/ptracks/manual_analysis.csv
+	[dal556]=http://dcs.whoi.edu/dal0618/dal0618_dal556_html/ptracks/manual_analysis.csv
 )
 
 # download data
-for i in "${!URL[@]}"; do   	
-	
+for i in "${!URL[@]}"; do
+
 	# define data directory
-	DATADIR=${DESTDIR}/data-${i}
+	DATADIR=${DESTDIR}/data/${i}
 
 	# make data directory
 	mkdir -p ${DATADIR}
@@ -36,7 +38,7 @@ for i in "${!URL[@]}"; do
 
 	# download glider detections
 	wget -q -N ${URL[$i]} -P ${DATADIR}
-		
+
 done
 
 # process data

@@ -12,10 +12,10 @@ library(shinyjqui)
 # setup -------------------------------------------------------------------
 
 # make list of glider deployments
-glider_list = dir(path = './', pattern = 'data-')
+glider_list = list.dirs(path = 'data', full.names = T, recursive = F)
 
 # isolate glider name
-glider_list = gsub(glider_list, pattern = 'data-', replacement = '')
+glider_list = basename(glider_list)
 
 # species choices
 spp_choices = c('right', 'fin', 'sei', 'humpback')

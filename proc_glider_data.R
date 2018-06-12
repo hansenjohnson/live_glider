@@ -101,18 +101,27 @@ proc_glider_kml = function(glider_dir){
   
   # waypoints ---------------------------------------------------------------
   
-  # extract glider waypoints
-  wpts = readOGR(kml_file, layer = lyrs[grep('Waypoints', lyrs)], verbose = F)
-  
-  # re-arrange surfacings in data frame
-  wpts = cbind.data.frame(wpts@coords[,c(2,1)], as.character(wpts$Name))
-  colnames(wpts) = c('lat', 'lon', 'name')
-  
-  # isolate waypoint IDs
-  wpts$name = grep(as.character(wpts$name), pattern = '(*)')
-  
-  # save
-  saveRDS(wpts, file = paste0(glider_dir,'/waypoints.rds'))
+  # if('Waypoints' %in% ogrListLayers(kml_file)){
+  #   
+  #   # extract glider waypoints
+  #   wpts = readOGR(kml_file, layer = lyrs[grep('Waypoints', lyrs)], verbose = F)
+  #   
+  #   # re-arrange surfacings in data frame
+  #   wpts = cbind.data.frame(wpts@coords[,c(2,1)], as.character(wpts$Name))
+  #   colnames(wpts) = c('lat', 'lon', 'name')
+  #   
+  #   # isolate waypoint IDs
+  #   wpts$name = grep(as.character(wpts$name), pattern = '(*)')
+  #   
+  # } else {
+  #   
+  #   # make blank data frame
+  #   wpts = data.frame(lat = NA, lon = NA, name = NA)
+  #   
+  # }
+  # 
+  # # save
+  # saveRDS(wpts, file = paste0(glider_dir,'/waypoints.rds'))
 }
 
 proc_glider_detections = function(glider_dir){
@@ -152,7 +161,7 @@ proc_glider_data = function(glider_dir){
 # process glider data -----------------------------------------------------
 
 # find glider directories
-glider_dir_list = dir(pattern = 'data-', recursive = F)
+glider_dir_list = list.dirs(path = 'data', recursive = F)
 
 # process data
 for(i in seq_along(glider_dir_list)){
