@@ -2,8 +2,8 @@
 # download glider data (detections and tracklines), then process using R script
 
 # Select app directory
-# DESTDIR=/srv/shiny-server/live_glider # server
-DESTDIR=/Users/hansenjohnson/Projects/live_glider # local
+DESTDIR=/srv/shiny-server/live_glider # server
+# DESTDIR=/Users/hansenjohnson/Projects/live_glider # local
 
 # Glider data URL (do not change)
 OTN=http://gliders.oceantrack.org/data/live/
