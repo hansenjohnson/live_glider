@@ -1,9 +1,11 @@
-.Rproj
+# file types
+*.Rproj
 .Rhistory
 .RData
 .Ruserdata
-.csv
-.rds
-.rda
-.kml
 .Rproj.user
+.DS_Store
+
+# directories
+dev/
+data/

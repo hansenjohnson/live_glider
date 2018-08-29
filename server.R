@@ -192,7 +192,10 @@ function(input, output, session) {
     
     leaflet(Det()) %>% 
       addProviderTiles(providers$Esri.OceanBasemap) %>%
-      fitBounds(~max(lon, na.rm = T), ~min(lat, na.rm = T), ~min(lon, na.rm = T), ~max(lat, na.rm = T)) %>%
+      fitBounds(~max(lon, na.rm = T), 
+                ~min(lat, na.rm = T), 
+                ~min(lon, na.rm = T), 
+                ~max(lat, na.rm = T)) %>%
       
       # use NOAA graticules
       addWMSTiles(
