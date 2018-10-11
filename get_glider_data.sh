@@ -16,6 +16,7 @@ declare -A URL
 
 # assign paths to detection data for each glider
 URL=(
+	[fundy]=http://dcs.whoi.edu/dal0918/dal0918_fundy_html/ptracks/manual_analysis.csv
 	[otn200]=http://dcs.whoi.edu/dal0818/dal0818_otn200_html/ptracks/manual_analysis.csv
 	# [scotia]=http://dcs.whoi.edu/dal0718/dal0718_scotia_html/ptracks/manual_analysis.csv
 	[dal556]=http://dcs.whoi.edu/dal0618/dal0618_dal556_html/ptracks/manual_analysis.csv
